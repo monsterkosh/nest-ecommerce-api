@@ -32,10 +32,15 @@ export class UserService {
       throw new HttpException('Invaliz credentials', HttpStatus.UNAUTHORIZED);
     }
 
-    if (await bcrypt.compare(password, password)) {
+    if (await bcrypt.compare(password, user.password)) {
       return this.sanatizeUser(user);
     } else {
-      throw new HttpException('Invalide credentials', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
+  }
+
+  async findByPayload(payload: any) {
+    const { username } = payload;
+    return await this.userModel.findOne({ username });
   }
 }
